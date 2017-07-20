@@ -67,3 +67,9 @@ date    open_issues     closed_issues   open_prs        closed_prs      open_bug
 2016-01-08      39      8       13      3       2       2       2       8       00      2       0
 2016-01-09      38      9       13      3       2       2       2       8       00      2       0
 ```
+
+## Cache
+
+After running the script for the first time, a `<org>_issues.json` file will
+appear in your work dir. This cache will be used in subsequent runs to minimize
+network and API usage and speed up processing.
