@@ -5,7 +5,7 @@ import os
 
 from .config import parse_config
 from .import_issues import import_issues
-from .process_issues import process_issues
+from .process_issues import activity_report, process_issues
 from .utils import print_error
 
 
@@ -24,6 +24,18 @@ def main():
         '-o', '--output', default='./results.tsv',
         help='Name of the output file. Default: ./results.tsv'
     )
+    activity = parser.add_argument_group('Activity report')
+
+    activity.add_argument(
+        '--activity', action='store_true',
+        help='Output an activity report instead of the default aggregate '
+             'output.'
+    )
+    activity.add_argument(
+        '-p', '--period', type=int, default=7, metavar='DAYS',
+        help='Set the interval period for the activity report in days.'
+             ' Default: weekly'
+    )
     args = parser.parse_args()
 
     config_file = args.config
@@ -38,7 +50,11 @@ def main():
         config_data['repo'].split('/'), github_token,
         config_data.get('start_date')
     )
-    process_issues(issues_data, config_data, output_file)
+
+    if args.activity:
+        activity_report(issues_data, config_data, output_file, args.period)
+    else:
+        process_issues(issues_data, config_data, output_file)
 
 if __name__ == '__main__':
     main()
