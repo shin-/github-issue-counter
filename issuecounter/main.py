@@ -6,10 +6,10 @@ import os
 from .config import parse_config
 from .import_issues import import_issues
 from .process_issues import activity_report, process_issues
-from .utils import print_error
+from .utils import print_error, write_to
 
 
-def main():
+def init_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '-c', '--config', default='./config.yml',
@@ -36,6 +36,12 @@ def main():
         help='Set the interval period for the activity report in days.'
              ' Default: weekly'
     )
+
+    return parser
+
+
+def main():
+    parser = init_parser()
     args = parser.parse_args()
 
     config_file = args.config
@@ -52,9 +58,11 @@ def main():
     )
 
     if args.activity:
-        activity_report(issues_data, config_data, output_file, args.period)
+        result = activity_report(issues_data, config_data, args.period)
     else:
-        process_issues(issues_data, config_data, output_file)
+        result = process_issues(issues_data, config_data)
+
+    return write_to(output_file, result)
 
 if __name__ == '__main__':
     main()

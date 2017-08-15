@@ -29,3 +29,10 @@ def extract_datetime(s):
     if isinstance(s, datetime.datetime):
         return s
     return datetime.datetime.strptime(s[:-3] + s[-2:], DATETIME_FORMAT)
+
+
+def write_to(output_file, data):
+    print('Writing to output file: %s' % output_file)
+    with open(output_file, 'w') as f:
+        for line in data:
+            f.write('\t'.join(str(x) for x in line) + '\n')

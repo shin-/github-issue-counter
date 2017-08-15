@@ -19,13 +19,7 @@ def _convert_dates(repo_data):
     return repo_data
 
 
-def _write_to(output_file, data):
-    with open(output_file, 'w') as f:
-        for line in data:
-            f.write('\t'.join(str(x) for x in line) + '\n')
-
-
-def activity_report(repo_data, config_data, output_file, interval=7):
+def activity_report(repo_data, config_data, interval=7):
     one_day = datetime.timedelta(days=1)
     period = datetime.timedelta(days=interval)
     now = datetime.datetime.now(datetime.timezone.utc)
@@ -38,9 +32,9 @@ def activity_report(repo_data, config_data, output_file, interval=7):
 
     # retrieve highest issue number
     last_number = min([int(i) for i in repo_data.keys()])
-    first_date = extract_datetime(repo_data[str(last_number)]['created_at'])
-    if 'start_date' in config_data:
-        first_date = config_data['start_date']
+    first_date = config_data.get('start_date') or extract_datetime(
+        repo_data[str(last_number)]['created_at']
+    )
 
     day = datetime.datetime(
         first_date.year, first_date.month, first_date.day,
@@ -132,11 +126,10 @@ def activity_report(repo_data, config_data, output_file, interval=7):
 
         day += period
 
-    print('Writing to output file: %s' % output_file)
-    _write_to(output_file, output_data)
+    return output_data
 
 
-def process_issues(repo_data, config_data, output_file):
+def process_issues(repo_data, config_data):
     one_day = datetime.timedelta(days=1)
     now = datetime.datetime.now(datetime.timezone.utc)
     output_data = []
@@ -148,9 +141,9 @@ def process_issues(repo_data, config_data, output_file):
 
     # retrieve highest issue number
     last_number = min([int(i) for i in repo_data.keys()])
-    first_date = extract_datetime(repo_data[str(last_number)]['created_at'])
-    if 'start_date' in config_data:
-        first_date = config_data['start_date']
+    first_date = config_data.get('start_date') or extract_datetime(
+        repo_data[str(last_number)]['created_at']
+    )
 
     day = datetime.datetime(
         first_date.year, first_date.month, first_date.day,
@@ -228,5 +221,4 @@ def process_issues(repo_data, config_data, output_file):
 
         day += one_day
 
-    print('Writing to output file: %s' % output_file)
-    _write_to(output_file, output_data)
+    return output_data
