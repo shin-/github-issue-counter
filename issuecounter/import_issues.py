@@ -10,7 +10,7 @@ from .utils import DateTimeEncoder
 from .utils import extract_datetime
 
 
-def import_issues(repo, gh_token, max_date=None, cache_folder=','):
+def import_issues(repo, gh_token, max_date=None, cache_folder='.'):
     org, repo_name = repo
     issues_file = '{}/{}_issues.json'.format(cache_folder, org)
     data = {}
