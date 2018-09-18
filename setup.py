@@ -13,7 +13,7 @@ install_requires = [
 
 setup(
     name='issuecounter',
-    version="0.0.1",
+    version="1.0.0",
     description='Multi-container orchestration for Docker',
     url='https://github.com/shin-/github-issue-counter',
     author='Joffrey F (based on code by @MorrisJobke)',
