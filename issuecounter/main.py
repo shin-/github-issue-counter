@@ -54,7 +54,8 @@ def main():
     config_data = parse_config(config_file)
     issues_data = import_issues(
         config_data['repo'].split('/'), github_token,
-        config_data.get('start_date')
+        config_data.get('start_date'),
+        cache_folder=os.environ.get('ISSUECOUNTER_CACHE_FOLDER', '.')
     )
 
     if args.activity:
